@@ -46,9 +46,9 @@ app.post("/person", jsonParser, function (req, res) {
                 {
                     console.log('Inserted %d documents into the "users" collection. The documents inserted with "_id" are:', result.length, result);
                 }
+                //Close connection
+                db.close();
             })
-            //Close connection
-            db.close();
         }
     });
 
