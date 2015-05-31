@@ -28,6 +28,7 @@ app.post("/person", jsonParser, function(req, res) {
             var collection = db.collection('person');
             //Create a person
             var person = {
+                pair: req.body.name.charAt(0).concat(req.body.lastname.charAt(0)),
                 name: req.body.name,
                 lastname: req.body.lastname,
                 image: req.body.image
