@@ -63,7 +63,7 @@ app.get("/person", jsonParser, function(req, res) {
                     console.log(err);
                 } else if (result.length) {
                     console.log('Found:', result);
-                    // res.send(result)
+                    res.send({people: result});
                 } else {
                     console.log('No document(s) found with defined "find" criteria!');
                 }
