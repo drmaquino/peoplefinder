@@ -33,10 +33,10 @@ app.post("/person", jsonParser, function (req, res) {
             // Get the documents collection
             var collection = db.collection('person');
 
-            //Create some users
+            //Create a person
             var person = {name: req.body.fn, lastname: req.body.ln, image: req.body.image};
 
-            // Insert some users
+            // Insert person
             collection.insert(person, function (err, result)
             {
                 if (err)
