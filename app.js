@@ -36,7 +36,7 @@ app.post("/person", jsonParser, function (req, res) {
             var person = {name: 'jackie', lastname: "chan", image: "/path/to/file"};
 
             // Insert some users
-            collection.insert([person], function (err, result)
+            collection.insert(person, function (err, result)
             {
                 if (err)
                 {
