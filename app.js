@@ -16,6 +16,7 @@ var jsonParser = bodyParser.json()
 
 /* routes */
 
+// add person to db
 app.post("/person", jsonParser, function (req, res) {
 
     MongoClient.connect(url, function (err, db)
