@@ -75,7 +75,32 @@ app.get("/person", jsonParser, function(req, res) {
     });
 });
 
-
+// get specific people
+app.get("/person/:pair", jsonParser, function(req, res) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
+            console.log('Unable to connect to the mongoDB server. Error:', err);
+            res.sendStatus(400);
+        } else {
+            console.log('Connection established to', url);
+            // Get the documents collection
+            var collection = db.collection('person');
+            // find all people
+            collection.find({pair: req.params.pair}).toArray(function(err, result) {
+                if (err) {
+                    console.log(err);
+                } else if (result.length) {
+                    console.log('Found:', result);
+                    res.send({people: result});
+                } else {
+                    console.log('No document(s) found with defined "find" criteria!');
+                }
+                //Close connection
+                db.close();
+            });
+        }
+    });
+});
 
 app.listen(port);
 
