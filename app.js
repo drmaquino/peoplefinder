@@ -17,34 +17,26 @@ var jsonParser = bodyParser.json()
 /* routes */
 
 // add person to db
-app.post("/person", jsonParser, function (req, res) {
-
-    MongoClient.connect(url, function (err, db)
-    {
-        if (err)
-        {
+app.post("/person", jsonParser, function(req, res) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) {
             console.log('Unable to connect to the mongoDB server. Error:', err);
             res.sendStatus(400);
-        }
-        else
-        {
+        } else {
             console.log('Connection established to', url);
-
             // Get the documents collection
             var collection = db.collection('person');
-
             //Create a person
-            var person = {name: req.body.fn, lastname: req.body.ln, image: req.body.image};
-
+            var person = {
+                name: req.body.fn,
+                lastname: req.body.ln,
+                image: req.body.image
+            };
             // Insert person
-            collection.insert(person, function (err, result)
-            {
-                if (err)
-                {
+            collection.insert(person, function(err, result) {
+                if (err) {
                     console.log(err);
-                }
-                else
-                {
+                } else {
                     console.log('Inserted %d documents into the "users" collection. The documents inserted with "_id" are:', result.length, result);
                 }
                 //Close connection
@@ -52,7 +44,7 @@ app.post("/person", jsonParser, function (req, res) {
             })
         }
     });
-    res.send(req.body);    // echo the result back
+    res.send(req.body); // echo the result back
 });
 
 // get all people
