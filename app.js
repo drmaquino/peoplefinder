@@ -38,7 +38,7 @@ app.post("/person", jsonParser, function(req, res) {
                 if (err) {
                     console.log(err);
                 } else {
-                    console.log('Inserted %d documents into the "users" collection. The documents inserted with "_id" are:', result.length, result);
+                    console.log('Inserted %d documents into the "person" collection. The documents inserted with "_id" are:', result.length, result);
                 }
                 //Close connection
                 db.close();
