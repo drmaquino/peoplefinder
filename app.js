@@ -67,6 +67,7 @@ app.get("/person", jsonParser, function(req, res) {
                     res.send({people: result});
                 } else {
                     console.log('No document(s) found with defined "find" criteria!');
+                    res.send({people: []});
                 }
                 //Close connection
                 db.close();
@@ -94,6 +95,7 @@ app.get("/person/:pair", jsonParser, function(req, res) {
                     res.send({people: result});
                 } else {
                     console.log('No document(s) found with defined "find" criteria!');
+                    res.send({people: []});
                 }
                 //Close connection
                 db.close();
