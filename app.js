@@ -6,7 +6,7 @@ var port = 9000;
 var app = express();
 
 // Database url
-var url = 'mongodb://localhost:27017/testdb';
+var url = 'mongodb://localhost:27017/namesdb';
 
 // Mongo client
 var MongoClient = mongodb.MongoClient;
