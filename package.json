@@ -1,5 +1,5 @@
 {
-  "name": "names-database",
+  "name": "peoplefinder",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -29,12 +29,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/drmaquino/names-database.git"
+    "url": "https://github.com/drmaquino/peoplefinder.git"
   },
   "author": "drmaquino",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/drmaquino/names-database/issues"
+    "url": "https://github.com/drmaquino/peoplefinder/issues"
   },
-  "homepage": "https://github.com/drmaquino/names-database"
+  "homepage": "https://github.com/drmaquino/peoplefinder"
 }
