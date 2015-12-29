@@ -1,109 +1,69 @@
-var express = require("express");
-var mongodb = require('mongodb');
-var bodyParser = require('body-parser')
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-var port = 9000;
+var apis = require('./routes/apis');
+var pages = require('./routes/pages');
+
 var app = express();
 
-// Database url
-var url = 'mongodb://localhost:27017/namesdb';
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
 
-// Mongo client
-var MongoClient = mongodb.MongoClient;
+app.set('view engine', 'jade');
 
-// create application/json parser
-var jsonParser = bodyParser.json()
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-/* routes */
+app.use('/', pages);
+app.use('/api', apis);
 
-// add person to db
-app.post("/person", jsonParser, function(req, res) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-            console.log('Unable to connect to the mongoDB server. Error:', err);
-            res.sendStatus(400);
-        } else {
-            console.log('Connection established to', url);
-            // Get the documents collection
-            var collection = db.collection('person');
-            //Create a person
-            var person = {
-                pair: req.body.name.charAt(0).concat(req.body.lastname.charAt(0)),
-                name: req.body.name,
-                lastname: req.body.lastname,
-                image: req.body.image
-            };
-            // Insert person
-            collection.insert(person, function(err, result) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log('Inserted %d documents into the "person" collection. The documents inserted with "_id" are:', result.length, result);
-                }
-                //Close connection
-                db.close();
-            })
-        }
-    });
-    res.send(req.body); // echo the result back
+/* Run Mode */
+if (app.get('env') ==='development') {
+  console.log("running in dev mode!");
+} else if (app.get('env') ==='production') {
+  console.log("running in prod mode!");
+}
+
+/* Database */
+if (app.get('env') ==='development') {
+  app.set('mongodb_uri', 'mongo://localhost/dev');
+} else if (app.get('env') ==='production') {
+  app.set('mongodb_uri', 'mongo://localhost/prod');
+}
+
+/* Error Handler */
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-// get all people
-app.get("/person", jsonParser, function(req, res) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-            console.log('Unable to connect to the mongoDB server. Error:', err);
-            res.sendStatus(400);
-        } else {
-            console.log('Connection established to', url);
-            // Get the documents collection
-            var collection = db.collection('person');
-            // find all people
-            collection.find({}).toArray(function(err, result) {
-                if (err) {
-                    console.log(err);
-                } else if (result.length) {
-                    console.log('Found:', result);
-                    res.send({people: result});
-                } else {
-                    console.log('No document(s) found with defined "find" criteria!');
-                    res.send({people: []});
-                }
-                //Close connection
-                db.close();
-            });
-        }
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  if (app.get('env') === 'development') {
+    // prints stacktrace for debugging
+    res.render('error', {
+      message: err.message,
+      error: err
     });
+  } else if (app.get('env') === 'production') {
+    // no stacktraces leaked to user
+    res.render('error', {
+      message: err.message,
+      error: {}
+    });
+  }
 });
 
-// get specific people
-app.get("/person/:pair", jsonParser, function(req, res) {
-    MongoClient.connect(url, function(err, db) {
-        if (err) {
-            console.log('Unable to connect to the mongoDB server. Error:', err);
-            res.sendStatus(400);
-        } else {
-            console.log('Connection established to', url);
-            // Get the documents collection
-            var collection = db.collection('person');
-            // find all people
-            collection.find({pair: req.params.pair}).toArray(function(err, result) {
-                if (err) {
-                    console.log(err);
-                } else if (result.length) {
-                    console.log('Found:', result);
-                    res.send({people: result});
-                } else {
-                    console.log('No document(s) found with defined "find" criteria!');
-                    res.send({people: []});
-                }
-                //Close connection
-                db.close();
-            });
-        }
-    });
-});
-
-app.listen(port);
-
-console.log("listening on port", port);
+module.exports = app;
