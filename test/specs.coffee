@@ -29,12 +29,7 @@ describe "specifications", ->
       .end (err, res) ->
         if err?
           console.log err
-        console.log res.text
-        # res.body.should.have.property("page")
-        # res.body.page.should.be.a.String()
-        # res.body.page.should.equal("index")
-        # res.body.should.have.property("args")
-        # res.body.args.should.be.an.Array()
+        res.text.should.containEql '<title>People Finder</title>'
         done()
 
   # describe "GET /test", ->

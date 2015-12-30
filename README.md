@@ -29,3 +29,7 @@ Registered users will be able to:
 * Add existing people to their personal collections.
 * Remove people from their personal collections.
 * Rate existing people in the database.
+
+Development
+-----------
+Project runs in dev mode by default. To run in production mode, use NODE_ENV=production before running through command line (for now!)
