@@ -20,9 +20,9 @@ describe "app", ->
     it "requires 'body-parser'", ->
       should.exist require "body-parser"
 
-describe "specifications", ->
-  describe "GET /", ->
-    it "should return index home page", (done) ->
+describe "pages", ->
+  describe "/ (root)", ->
+    it "should return home page", (done) ->
       request(app)
       .get "/"
       .expect 200
@@ -32,8 +32,15 @@ describe "specifications", ->
         res.text.should.containEql '<title>People Finder</title>'
         done()
 
-  # describe "GET /test", ->
-  #   it "should return test", (done) ->
-  #     request(app)
-  #     .get "/test"
-  #     .expect 200, done
+describe "apis", ->
+  describe "POST /api/person", ->
+    person =
+      pair: "af"
+      name: "adol"
+      lastname: "fito"
+      image: "imagito"
+    it "should receive a person and add it to the db", (done) ->
+      request(app)
+      .post "/api/person"
+      .send person
+      .expect 200, done
