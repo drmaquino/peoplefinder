@@ -6,30 +6,28 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var apis = require('./routes/apis');
 var pages = require('./routes/pages');
-var mongodb = require("./mongodb")
+var dbhelper = require("./database/dbhelper")
 
 var app = express();
 
-/* Run Mode */
+/* Environment-Specific Configuration */
 if (app.get('env') ==='development') {
     console.log("running in dev mode!");
-} else if (app.get('env') ==='production') {
-    console.log("running in prod mode!");
+    app.use(logger('dev'));
+    dbhelper.connect('mongodb://localhost/peoplefinder-dev');
 }
-
-/* Logger */
-if (app.get('env') ==='development') {
-    // app.use(logger('dev'));
+else if (app.get('env') ==='production') {
+    console.log("running in prod mode!");
+    app.use(logger('prod'));
+    dbhelper.connect('mongodb://localhost/peoplefinder-prod');
+}
+else if (app.get('env') ==='test') {
+    console.log("running in test mode!");
+    dbhelper.connect('mongodb://localhost/peoplefinder-dev'); /* for now! */
 }
 
 /* Database */
-if (app.get('env') ==='development') {
-    app.set('mongodb_uri', 'mongo://localhost/peoplefinder-dev');
-} else if (app.get('env') ==='production') {
-    app.set('mongodb_uri', 'mongo://localhost/peoplefinder-prod');
-}
-
-app.use(mongodb);
+app.use(dbhelper.middleware);
 
 /* View Engine */
 app.set('views', path.join(__dirname, 'views'));
@@ -47,7 +45,6 @@ app.use('/', pages);
 app.use('/api', bodyParser.json(), apis);
 
 /* Error Handler */
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
