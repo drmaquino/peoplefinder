@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* Home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', {title: 'People Finder', linkto: 'test'});
+    res.render('home', {title: 'People Finder', linkto: 'test'});
 });
 
-/* GET test page. */
+/* Test page. */
 router.get('/test', function(req, res, next) {
-    res.send({text: "test"});
+    res.render('test', {content: "'test content!'"});
 });
 
 module.exports = router;
